@@ -61,4 +61,25 @@ app.get('/db/retrieve/:username/:email/:password', (req, res) => {
 
     connection.end()
 })
+
+app.get('/db/update/:id/:username', (req, res) => {
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'myapp'
+    })
+    connection.connect()
+    connection.query(`UPDATE accounts set username ='${req.params.username}' where id='${req.params.id}'`, function (err, rows, fields) {
+        if (err) throw err
+
+        res.json({  
+            data: rows,
+            params: req.params,
+            username: req.params.username
+        })
+    })
+
+    connection.end()
+})
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
